@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %} Register{% endblock  %}
+
+{% block content %}
+<h1> Menu Register</h1>
+
+<form method="POST" action="{{url_for('register')}}" 
+    class="was-validated">{{form.hidden_tag()}} 
+    <div class="col-sm-4">
+        {{form.nama.label(class="form-label")}}
+        {{form.nama(class="form-control")}}
+        <div class="invalid-feedback">
+            {% for error in form.nama.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col-sm-4">
+        {{form.email.label(class="form-label")}}
+        {{form.email(class="form-control")}}
+        <div class="invalid-feedback">
+            {% for error in form.email.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col-sm-4">
+        {{form.password.label(class="form-label")}}
+        {{form.password(class="form-control")}}
+        <div class="invalid-feedback">
+            {% for error in form.password.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col-sm-4">
+        {{form.confirm_password.label(class="form-label")}}
+        {{form.confirm_password(class="form-control")}}
+        <div class="invalid-feedback">
+            {% for error in form.confirm_password.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col-sm-4">
+        {{ form.submit(class="btn btn-primary")}}
+    </div>
+</form>
+{% endblock  %}

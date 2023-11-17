@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>App |{% block title %}{% endblock  %}</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    </head>
+    <body>
+        <div  class="container-fluid p-2 bg-light text-black text-center">
+            <h1>Aplikasi Menggunakan Flask</h1>
+        </div>
+
+        <nav class="navbar navbar-expand-sm navbar-dark bg-success p-2">
+            <div class="container-fluid"> 
+                <a class="navbar-brand" href="/">Toko Berkah</a>
+                <button
+                    class="navbar-toggler"
+                    typt="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#mynavbar"
+                >
+                <span class="navbar-toggler-icon"></span>
+                </button> 
+                <div class="collapse navbar-collapse"  id="mynavbar" >
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Dashboard </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('barang.list_barang')}}">Data barang </a>
+                        </li>
+                        
+                    </ul>
+                    <div class="d-flex dropdown">
+                        <button type="button"
+                            class="btn btn-primary dropdown-toggle"
+                            data-bs-toggle="dropdown">
+                            {% if user_email %}
+                                {{user_email}}
+                            {% else %}
+                                Pengunjung
+                            {% endif %}
+                        </button>
+                        <ul class="dropdown-menu">
+                            {% if not user_email or user_email == 'Pengunjung' %}
+                            <a class="dropdown-item" href="{{ url_for('login') }}">Login</a>
+                            {% else %}
+                            <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
+                            {% endif %}
+                            
+                            <li><a class="dropdown-item" href="/register">Register</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="container mt-5">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-success alert-dismissible-{{ category }}">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            <strong>{{message}}</strong> 
+                          </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <div class="row">
+                {% block content %}{% endblock  %}
+            </div>
+        </div>
+       
+
+
+
+
+    </body>
+</html>

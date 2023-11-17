@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}Barang{% endblock %}
+
+{% block content %}
+<h1> Data Barang </h1>
+<p>
+    <button type="button" class="btn btn-sm btn-info">
+        <a href="{{url_for('barang.add')}}" class="btn btn-sm">
+            <i class= "fas fa-plus"> Tambah</i>
+        </a>
+    </button>
+</p>
+<table class="table mt-3">
+    <thead>
+        <tr>
+            <th>Id </th>
+            <th>Nama Barang</th>
+            <th>Harga</th>
+            <th>Jenis</th>
+            <th>Qt</th>
+            <th>Menu</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for barang in barangs %}
+        <tr class="dataRow">
+            <td>{{barang.id}}</td>
+            <td>{{barang.nama_barang}}</td>
+            <td>{{barang.harga}}</td>
+            <td>{{barang.jenis}}</td>
+            <td>{{barang.qt}}</td>
+            <td>
+                <a href="{{url_for('barang.edit', id=barang.id)}}" 
+                    class="btn btn-info btn-sm">Edit</a>
+                <a href="{{url_for('barang.delete', id=barang.id)}}" 
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('Apakah Anda yakin?')" >
+                   Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<!-- Script Javacript -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<!-- Script SoketIO -->
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
+<!--Script untuk memanipulasi DOM-->
+<script type="text/javascript">
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+    // Menanggapi peristiwa 'data_added' dari soket
+    socket.on('data_added', function(data) {
+        // Memperbarui tampilan atau menambahkan elemen baru
+        updateView(data);
+    });
+
+    function updateView(data) {
+        // Mencari elemen dengan kelas "dataRow" dan ID yang sesuai
+        var rowToUpdate = $('.dataRow').filter(function() {
+            return $(this).find('td:first').text() == data.id;
+        });
+    
+        // Memeriksa apakah elemen ditemukan
+        if (rowToUpdate.length > 0) {
+            // Memperbarui data dalam elemen yang ditemukan
+            rowToUpdate.find('td:eq(1)').text(data.nama_barang);
+            rowToUpdate.find('td:eq(2)').text(data.harga);
+            rowToUpdate.find('td:eq(3)').text(data.jenis);
+            rowToUpdate.find('td:eq(4)').text(data.qt);
+    
+            // Menambahkan tombol edit dan delete
+            var actionsCell = rowToUpdate.find('td:eq(5)');
+            actionsCell.empty();
+            actionsCell.append(
+                '<a href="/barang/edit/' + data.id + '" class="btn btn-info btn-sm">Edit</a>' +
+                '<a href="/barang/delete/' + data.id + '" class="btn btn-danger btn-sm" ' +
+                'onclick="return confirm(\'Apakah Anda yakin?\')">Delete</a>'
+            );
+            } else {
+                // Jika elemen Tidak di temukan tambahkan elemen baru ke dalam table
+                var newRow = $('<tr class="dataRow">');
+                    newRow.append('<td>' + data.id + '</td>');
+                    newRow.append('<td>' + data.nama_barang + '</td>');
+                    newRow.append('<td>' + data.harga + '</td>');
+                    newRow.append('<td>' + data.jenis + '</td>');
+                    newRow.append('<td>' + data.qt + '</td>');
+                    // Menambahkan Tombol edit dan delete
+                    newRow.append(
+                    '<td>' +
+                        '<a href="/barang/edit/' + data.id + '" class="btn btn-info btn-sm">Edit</a>' +
+                        '<a href="/barang/delete/' + data.id + '" class="btn btn-danger btn-sm" ' +
+                        'onclick="return confirm(\'Apakah Anda yakin?\')">Delete</a>' +
+                    '</td>'
+                );
+                // Ganti Dengan id element Tabel yang sesui di halaman 
+                $('tbody').append(newRow);
+       
+            }
+    }
+</script>
+{% endblock content %}

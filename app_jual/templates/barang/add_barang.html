@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Add barang{% endblock  %}
+
+{% block content %}
+<h1>Add barang</h1>
+<form method="POST" action="{{url_for('barang.add')}}" 
+    class="was-validated">{{form.hidden_tag()}} 
+    <div class="col-sm-4">
+        {{form.nama_barang.label(class="form-label")}}
+        {{form.nama_barang(class="form-control")}}
+        <div class="invalid-feedback">
+            {% for error in form.nama_barang.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col-sm-4">
+        {{form.harga.label(class="form-label")}}
+        {{form.harga(class="form-control")}}
+        <div class="invalid-feedback">
+            {% for error in form.harga.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col-sm-4">
+        {{form.qt.label(class="form-label")}}
+        {{form.qt(class="form-control")}}
+        <div class="invalid-feedback">
+            {% for error in form.qt.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col-sm-4">
+        {{form.jenis.label(class="form-label")}}
+        {{form.jenis(class="form-control")}}
+        <div class="invalid-feedback">
+            {% for error in form.jenis.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col-sm-4">
+        {{ form.submit(class="btn btn-primary")}}
+    </div>
+</form>
+
+{% endblock content %}
